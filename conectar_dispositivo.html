@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Rastreamento de Dispositivos</title>
+</head>
+<body>
+
+  <header>
+    <a href="index.html">Voltar ao Manual</a>
+    <h1>Meus Dispositivos</h1>
+  </header>
+
+  <section>
+    <h2>Adicionar Dispositivo</h2>
+    <form id="form-dispositivo">
+      <label for="nome">Nome do dispositivo:</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="bateria">Bateria (%):</label>
+      <input type="number" id="bateria" name="bateria" min="0" max="100">
+
+      <button type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Lista de Dispositivos</h2>
+    <ul id="lista-dispositivos"></ul>
+  </section>
+
+  <footer>
+    <p>Autoras: Samyra e Thamirys</p>
+  </footer>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+
+    //Substitua pelas variáveis do seu projeto
+    const supabase = createClient("https://jgpzexdccrheegmuriuc.supabase.co", "sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW")
+
+    // Função para listar dispositivos
+    async function listarDispositivos() {
+      const { data, error } = await supabase.from("dispositivos").select("*")
+      if (error) {
+        console.error(error)
+        return
+      }
+      const lista = document.getElementById("lista-dispositivos")
+      lista.innerHTML = ""
+      data.forEach(d => {
+        lista.innerHTML += `
+          <li>
+            <strong>${d.nome}</strong> - Bateria: ${d.bateria || 0}% - Conectado: ${d.conectado}
+            <button onclick="conectarDispositivo('${d.id}')">Conectar</button>
+            <button onclick="desconectarDispositivo('${d.id}')">Desconectar</button>
+            <button onclick="excluirDispositivo('${d.id}')">Excluir</button>
+          </li>
+        `
+      })
+    }
+
+    // Adicionar dispositivo
+    document.getElementById("form-dispositivo").addEventListener("submit", async (e) => {
+      e.preventDefault()
+      const nome = document.getElementById("nome").value
+      const bateria = document.getElementById("bateria").value
+      const { error } = await supabase.from("dispositivos").insert([{ nome, bateria }])
+      if (error) alert(error.message)
+      else listarDispositivos()
+    })
+
+    // Conectar dispositivo
+    window.conectarDispositivo = async (id) => {
+      await supabase.from("dispositivos").update({ conectado: true }).eq("id", id)
+      listarDispositivos()
+    }
+
+    // Desconectar dispositivo
+    window.desconectarDispositivo = async (id) => {
+      await supabase.from("dispositivos").update({ conectado: false }).eq("id", id)
+      listarDispositivos()
+    }
+
+    // Excluir dispositivo
+    window.excluirDispositivo = async (id) => {
+      await supabase.from("dispositivos").delete().eq("id", id)
+      listarDispositivos()
+    }
+
+    // Inicializa lista
+    listarDispositivos()
+  </script>
+</body>
+</html>

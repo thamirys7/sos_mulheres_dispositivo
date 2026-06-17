@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Contatos de Emergência - Telegram</title>
+</head>
+<body>
+
+  <header>
+    <a href="index.html">Voltar ao Manual</a>
+    <img src="../imagens/logo2.png" alt="Logo do site" width="250" height="200">
+    <h1>Contatos de Emergência</h1>
+    <p>Gerencie os contatos do Telegram que serão notificados em caso de emergência.</p>
+  </header>
+
+
+  <section>
+    <p><strong>Recomendamos cadastrar pelo menos 3 contatos de emergência no Telegram para garantir que você receba ajuda quando precisar.</strong></p>
+  </section>
+
+
+  <section>
+    <h2>Adicionar Contato do Telegram</h2>
+    <form>
+      <label for="telegram">Usuário ou link do Telegram:</label>
+      <input type="text" id="telegram" name="telegram" placeholder="@usuario ou https://t.me/usuario">
+
+      <button type="submit">Adicionar</button>
+    </form>
+  </section>
+
+  <section>
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+      const supabase = createClient("https://jgpzexdccrheegmuriuc.supabase.co", "sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW")
+
+      async function listarContatos() {
+        const { data, error } = await supabase.from("contatos").select("*")
+        if (error) console.error(error)
+        else {
+          const lista = document.querySelector("ul")
+          lista.innerHTML = ""
+          data.forEach(c => {
+            lista.innerHTML += `<li>${c.telegram}
+              <button onclick="editarContato('${c.id}')">Editar</button>
+              <button onclick="excluirContato('${c.id}')">Excluir</button>
+            </li>`
+          })
+        }
+      }
+
+      document.querySelector("form").addEventListener("submit", async (e) => {
+        e.preventDefault()
+        const telegram = document.getElementById("telegram").value
+        await supabase.from("contatos").insert([{ telegram }])
+        listarContatos()
+      })
+
+      listarContatos()
+    </script>
+  </section>
+
+
+  <footer>
+    <p>Autor: Samyra e Thamirys</p>
+  </footer>
+</body>
+</html>
