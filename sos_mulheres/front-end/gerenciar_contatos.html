@@ -29,21 +29,35 @@
     </form>
   </section>
 
-
   <section>
-    <h2>Meus Contatos</h2>
-    <ul>
-      <li>
-        @MariaSilva
-        <button>Editar</button>
-        <button>Excluir</button>
-      </li>
-      <li>
-        https://t.me/JoaoSouza
-        <button>Editar</button>
-        <button>Excluir</button>
-      </li>
-    </ul>
+    <script type="module">
+      import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
+      const supabase = createClient("https://jgpzexdccrheegmuriuc.supabase.co", "sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW")
+
+      async function listarContatos() {
+        const { data, error } = await supabase.from("contatos").select("*")
+        if (error) console.error(error)
+        else {
+          const lista = document.querySelector("ul")
+          lista.innerHTML = ""
+          data.forEach(c => {
+            lista.innerHTML += `<li>${c.telegram}
+              <button onclick="editarContato('${c.id}')">Editar</button>
+              <button onclick="excluirContato('${c.id}')">Excluir</button>
+            </li>`
+          })
+        }
+      }
+
+      document.querySelector("form").addEventListener("submit", async (e) => {
+        e.preventDefault()
+        const telegram = document.getElementById("telegram").value
+        await supabase.from("contatos").insert([{ telegram }])
+        listarContatos()
+      })
+
+      listarContatos()
+    </script>
   </section>
 
 
