@@ -1,0 +1,276 @@
+/* Variáveis de cores */
+:root {
+  --cor-principal: #6a1b9a;
+  --cor-secundaria: #4a148c;
+  --cor-fundo: #deb9f5;
+  --cor-texto: #000000;
+  --cor-header: #000000;
+  --cor-aviso: #fff3cd;
+  --cor-aviso-borda: #ffeeba;
+  --cor-container: #fff;
+  --cor-footer: #f1f1f1;
+  --cor-lista: #f9f9fb;
+}
+
+/* Estrutura geral */
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  margin: 0;
+  padding: 0;
+  padding-top: 250px;
+}
+
+/* Header fixo no topo */
+header {
+  background-color: var(--cor-fundo);
+  color: var(--cor-header);
+  padding: 15px;
+  text-align: center;
+  position: fixed;   
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;     
+}
+
+header img {
+  display: block;
+  margin: 0 auto 10px;
+  width: 150px;
+  height: auto;
+}
+
+/* Menu horizontal */
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav a {
+  color: var(--cor-principal);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* Container padrão */
+.container, .login-box, .contacts-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: var(--cor-container);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  color: var(--cor-principal);
+  margin-bottom: 5px;
+}
+
+h2 {
+  color: #000000;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+p, li {
+  line-height: 1.6;
+}
+
+ol, ul {
+  margin-left: 20px;
+}
+
+/* Botões */
+.buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+button {
+  background-color: var(--cor-principal);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: var(--cor-secundaria);
+}
+
+/* Login */
+.login-box {
+  max-width: 400px;
+  margin: 80px auto;
+  background: var(--cor-container);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.login-box .links {
+  margin-top: 15px;
+  font-size: 0.9em;
+}
+
+.login-box .links a {
+  display: block;
+  color: var(--cor-principal);
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.login-box button {
+  width: 100%;
+  margin-top: 15px;
+  background-color: var(--cor-principal);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.login-box button:hover {
+  background-color: var(--cor-secundaria);
+}
+
+/* Contatos */
+.warning {
+  background: var(--cor-aviso);
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  border: 1px solid var(--cor-aviso-borda);
+}
+
+.contacts-container {
+  text-align: center;
+}
+
+.contacts-container img {
+  display: block;
+  margin: 0 auto 20px;
+}
+
+.contacts-container h2 {
+  margin: 10px 0;
+  color: var(--cor-principal);
+}
+
+.contacts-container p {
+  margin: 5px 0 20px;
+  font-size: 1.1em;
+  color: var(--cor-texto);
+}
+
+.contacts-grid {
+  display: flex;
+  gap: 30px;
+}
+
+.contacts-grid .form, .contacts-grid .list {
+  flex: 1;
+}
+
+.contacts-grid input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.contacts-grid button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.list {
+  background: var(--cor-lista);
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* Bluetooth */
+.bluetooth-box {
+  background: #e6f4ea; 
+  border: 1px solid #b7e1cd;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 100px;
+  max-width: 400px;
+  text-align: center;
+}
+
+#status-bluetooth {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.status-conectado {
+  color: #2e7d32;
+}
+
+.status-desconectado {
+  color: #c62828;
+}
+
+.status-erro {
+  color: #ff9800;
+}
+
+#btn-bluetooth {
+  background: var(--cor-principal);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background 0.3s;
+}
+
+#btn-bluetooth:hover {
+  background: var(--cor-principal);
+}
+
+/* Footer */
+footer {
+  background-color: var(--cor-footer);
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+}
+
+footer a {
+  color: var(--cor-principal);
+  text-decoration: none;
+}
+
