@@ -153,8 +153,8 @@
         const server = await dispositivoBluetooth.gatt.connect()
 
         // Monitorar botão
-        const service = await server.getPrimaryService("custom_button_service")
-        const characteristic = await service.getCharacteristic("button_pressed")
+        const service = await server.getPrimaryService("12345678-1234-1234-1234-1234567890ab")
+        const characteristic = await service.getCharacteristic("abcd1234-5678-90ab-cdef-1234567890ab")
 
         characteristic.addEventListener("characteristicvaluechanged", event => {
           const valor = event.target.value.getUint8(0)
