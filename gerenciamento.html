@@ -80,12 +80,14 @@
 
     document.getElementById("form-contato").addEventListener("submit", async (e) => {
       e.preventDefault()
+      const nome = document.getElementById("nome").value
       const telegram = document.getElementById("telegram").value
       const chatid = document.getElementById("chatid").value
 
       const { error } = await supabase.from("contatos").insert([{ telegram, chat_id: chatid }])
       if (error) console.error(error)
 
+      document.getElementById("nome").value = ""
       document.getElementById("telegram").value = ""
       document.getElementById("chatid").value = ""
       listarContatos()
