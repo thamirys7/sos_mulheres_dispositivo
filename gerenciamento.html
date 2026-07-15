@@ -58,7 +58,10 @@
   <!-- Script Supabase -->
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
-    const supabase = createClient("https://jgpzexdccrheegmuriuc.supabase.co", "sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW")
+    const supabase = createClient(
+      "https://jgpzexdccrheegmuriuc.supabase.co",
+      "sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW"
+    )
 
     async function listarContatos() {
       const { data, error } = await supabase.from("contatos").select("*")
@@ -80,7 +83,8 @@
       const telegram = document.getElementById("telegram").value
       const chatid = document.getElementById("chatid").value
 
-      await supabase.from("contatos").insert([{ telegram, chat_id: chatid }])
+      const { error } = await supabase.from("contatos").insert([{ telegram, chat_id: chatid }])
+      if (error) console.error(error)
 
       document.getElementById("telegram").value = ""
       document.getElementById("chatid").value = ""
@@ -92,14 +96,19 @@
       const novoTelegram = prompt("Editar contato:", atual)
       const novoChatId = prompt("Editar chat ID:", chatid)
       if (novoTelegram && novoChatId) {
-        await supabase.from("contatos").update({ telegram: novoTelegram, chat_id: novoChatId }).eq("id", id)
+        const { error } = await supabase
+          .from("contatos")
+          .update({ telegram: novoTelegram, chat_id: novoChatId })
+          .eq("id", id)
+        if (error) console.error(error)
         listarContatos()
       }
     }
 
     window.excluirContato = async (id) => {
       if (confirm("Deseja excluir este contato?")) {
-        await supabase.from("contatos").delete().eq("id", id)
+        const { error } = await supabase.from("contatos").delete().eq("id", id)
+        if (error) console.error(error)
         listarContatos()
       }
     }
@@ -119,7 +128,11 @@
       for (const contato of data) {
         await fetch("https://jgpzexdccrheegmuriuc.supabase.co/functions/v1/enviarAlerta", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": "sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW",
+            "Authorization": "Bearer sb_publishable_MfUuutByxm1UeC7oE7RrqQ_ThauSqTW"
+          },
           body: JSON.stringify({
             chatId: Number(contato.chat_id),
             mensagem: "Emergência detectada pelo dispositivo IoT!"
@@ -143,24 +156,19 @@
       try {
         dispositivoBluetooth = await navigator.bluetooth.requestDevice({
           acceptAllDevices: true,
-          optionalServices: ['battery_service', 'custom_button_service']
+          optionalServices: ["12345678-1234-1234-1234-1234567890ab"]
         })
         atualizarStatus("Status: Conectado a " + dispositivoBluetooth.name, "status-conectado")
         document.getElementById("btn-bluetooth").innerText = "Desconectar Bluetooth"
         document.getElementById("btn-bluetooth").style.backgroundColor = "#c62828"
 
-        // Conectar ao servidor GATT
         const server = await dispositivoBluetooth.gatt.connect()
-
-        // Monitorar botão
         const service = await server.getPrimaryService("12345678-1234-1234-1234-1234567890ab")
         const characteristic = await service.getCharacteristic("abcd1234-5678-90ab-cdef-1234567890ab")
 
         characteristic.addEventListener("characteristicvaluechanged", event => {
           const valor = event.target.value.getUint8(0)
-          if (valor === 1) {
-            enviarAlertaParaContatos() // Dispara para todos os contatos cadastrados
-          }
+          if (valor === 1) enviarAlertaParaContatos()
         })
 
         await characteristic.startNotifications()
@@ -180,11 +188,8 @@
     }
 
     document.getElementById("btn-bluetooth").addEventListener("click", () => {
-      if (!dispositivoBluetooth || !dispositivoBluetooth.gatt.connected) {
-        conectarBluetooth()
-      } else {
-        desconectarBluetooth()
-      }
+      if (!dispositivoBluetooth || !dispositivoBluetooth.gatt.connected) conectarBluetooth()
+      else desconectarBluetooth()
     })
   </script>
 
